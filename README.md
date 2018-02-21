@@ -22,27 +22,27 @@ Install tmux
 
 ## Set config files
 * components/Grafana/config.py
-  * INFLUX_DBASE_HOST= \<IP of machine running influxdb>
+  * `INFLUX_DBASE_HOST= <IP of machine running influxdb>`
 * components/config.py
-  * DSO_ADDRESS = 'tcp://\<IP of machine running DSO>:10001'
+  * `DSO_ADDRESS = 'tcp://<IP of machine running DSO>:10001'`
 * launcher.sh
-  * MINER=\<IP of machine running MINER>  
+  * `MINER=<IP of machine running MINER>`  
 * test-10-11-withbattery/testrun.sh
-  * nohup python3 $PARENT/components/SmartHomeTraderWrapper.py $i **\<IP of machine running MINER>** 10000 ...
+  * `nohup python3 $PARENT/components/SmartHomeTraderWrapper.py $i`**`<IP of machine running MINER>`**`10000 ...`
   
   
 ## How to run
   1. Start the miner
-    1. cd EnergyMarket/miner
-    2. ./launchBC.sh
+    1. `cd EnergyMarket/miner`
+    2. `./launchBC.sh`
   1. Start the DSO, Solver, and Event recorder
-    1. cd EnergyMarket/
-      1. launcher.sh
+    1. `cd EnergyMarket/`  
+      1. `launcher.sh`
   1. Start the prosumers
-     1. cd EnergyMarket/
-     1. ./test-10-11-withbattery/testrun.sh
+     1. `cd EnergyMarket/`
+     1. `./test-10-11-withbattery/testrun.sh`
      * or to run from terminal
-     * nohup python3 components/SmartHomeTraderWrapper.py \<prosumer id> \<MINER IP> 10000
+     * `nohup python3 components/SmartHomeTraderWrapper.py <prosumer id> <MINER IP> 10000`
   1. Open Grafana
     1. open browser
     1. http://localhost:3000
