@@ -33,5 +33,25 @@ Install tmux
   
 ## How to run
   1. Start the miner
-  2. Start the DSO, Solver, and Event recorder
-  3. Start the prosumers
+    1. cd EnergyMarket/miner
+    2. ./launchBC.sh
+  1. Start the DSO, Solver, and Event recorder
+    1. cd EnergyMarket/
+      1. launcher.sh
+  1. Start the prosumers
+     1. cd EnergyMarket/
+     1. ./test-10-11-withbattery/testrun.sh
+     * or to run from terminal
+     * nohup python3 components/SmartHomeTraderWrapper.py \<prosumer id> \<MINER IP> 10000
+  1. Open Grafana
+    1. open browser
+    1. http://localhost:3000
+    1. Click spiral icon in top left corner
+    1. select `Dashboards` -> `Import`
+    1. Upload Energy-Market/Grafana-dashboard/Energy Market Local-1519239580453.json
+    1. Ajust time range to fit data
+        * click clock in top right corner. 
+
+    
+     
+
