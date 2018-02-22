@@ -34,8 +34,8 @@ class SmartHomeTraderWrapper:
     self.dbase = Database()
     self.role = None
     self.roleID = 0
-    self.grid = zmq.Context().socket(zmq.PUB)
-    self.grid.bind('tcp://127.0.0.1:2'+str(self.prosumer_id))
+    #self.grid = zmq.Context().socket(zmq.PUB)
+    #self.grid.bind('tcp://127.0.0.1:2'+str(self.prosumer_id))
 
     super(SmartHomeTraderWrapper, self).__init__()
 
@@ -48,7 +48,7 @@ class SmartHomeTraderWrapper:
 
     next_prediction = self.epoch + (time_interval + 1) * INTERVAL_LENGTH
     logging.info("next_prediction %s" %(next_prediction))
-    next_actuation = next_prediction + 2*INTERVAL_LENGTH
+    next_actuation = next_prediction + INTERVAL_LENGTH
     logging.info("next_actuation %s" %(next_actuation))
     interval_trades = {}
 
@@ -78,18 +78,19 @@ class SmartHomeTraderWrapper:
             finalized = params['time']
             power = params['power']
             interval_trades[finalized].append(power)
-            self.grid.send_pyobj({"interval" : finalized, "power": self.roleID*sum(interval_trades[finalized]), "INTERVAL_LENGTH" : INTERVAL_LENGTH, "time_stamp" : next_actuation})
+            #self.grid.send_pyobj({"interval" : finalized, "power": self.roleID*sum(interval_trades[finalized]), "INTERVAL_LENGTH" : INTERVAL_LENGTH, "time_stamp" : next_actuation})
             self.dbase.log(finalized,self.role,self.prosumer_id,sum(interval_trades[finalized]))
 
 
       if current_time > next_prediction:
+        logging.info("current_time %s" %current_time)
         self.post_offers(time_interval)
-        self.dbase.log(time_interval-3, "interval_now", self.prosumer_id, time_interval-3)
+        self.dbase.log(time_interval-2, "interval_now", self.prosumer_id, time_interval-2)
         time_interval += 1
         self.dbase.log(time_interval, self.role, self.prosumer_id, 0)#trying to have a value posted to influx every interval.
         next_prediction += INTERVAL_LENGTH
         next_actuation += INTERVAL_LENGTH
-        self.grid.send_pyobj({"interval" : time_interval, "power": 0, "INTERVAL_LENGTH" : INTERVAL_LENGTH, "time_stamp" : next_actuation+INTERVAL_LENGTH})
+        #self.grid.send_pyobj({"interval" : time_interval, "power": 0, "INTERVAL_LENGTH" : INTERVAL_LENGTH, "time_stamp" : next_actuation+INTERVAL_LENGTH})
       sleep(max(min(next_prediction, next_polling) - time(), 0))
 
   def post_offers(self, time_interval):
