@@ -25,10 +25,15 @@ Install tmux
   * `INFLUX_DBASE_HOST= <IP of machine running influxdb>`
 * components/config.py
   * `DSO_ADDRESS = 'tcp://<IP of machine running DSO>:10001'`
+  * `DATA_PATH = <path to repo>/test-10-11-withbattery/opal-data10x/`
 * launcher.sh
   * `MINER=<IP of machine running MINER>`  
 * test-10-11-withbattery/testrun.sh
   * `nohup python3 $PARENT/components/SmartHomeTraderWrapper.py $i`**`<IP of machine running MINER>`**`10000 ...`
+* miner/launchBC
+  * tmux send -t miner.0 "$DIR/geth-linux-amd64/geth --datadir $DIR/eth --rpc --rpcport 10000 --rpcaddr **`<IP of machine running MINER>`** --nodiscover --rpcapi "eth,web3,admin,miner,net,db" --password password.txt --unlock 0 --networkid 15 --mine | tee miner.out" ENTER
+
+
   
   
 ## How to run
