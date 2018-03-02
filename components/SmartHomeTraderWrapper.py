@@ -34,8 +34,9 @@ class SmartHomeTraderWrapper:
     self.dbase = Database()
     self.role = None
     self.roleID = 0
-    #self.grid = zmq.Context().socket(zmq.PUB)
+    self.grid = zmq.Context().socket(zmq.PUB)
     #self.grid.bind('tcp://127.0.0.1:2'+str(self.prosumer_id))
+    self.grid.bind('tcp://127.0.0.1:2000')
 
     super(SmartHomeTraderWrapper, self).__init__()
 
@@ -78,7 +79,7 @@ class SmartHomeTraderWrapper:
             finalized = params['time']
             power = params['power']
             interval_trades[finalized].append(power)
-            #self.grid.send_pyobj({"interval" : finalized, "power": self.roleID*sum(interval_trades[finalized]), "INTERVAL_LENGTH" : INTERVAL_LENGTH, "time_stamp" : next_actuation})
+            self.grid.send_pyobj({"interval" : finalized, "power": self.roleID*sum(interval_trades[finalized]), "INTERVAL_LENGTH" : INTERVAL_LENGTH, "time_stamp" : next_actuation})
             self.dbase.log(finalized,self.role,self.prosumer_id,sum(interval_trades[finalized]))
 
 
@@ -90,7 +91,7 @@ class SmartHomeTraderWrapper:
         self.dbase.log(time_interval, self.role, self.prosumer_id, 0)#trying to have a value posted to influx every interval.
         next_prediction += INTERVAL_LENGTH
         next_actuation += INTERVAL_LENGTH
-        #self.grid.send_pyobj({"interval" : time_interval, "power": 0, "INTERVAL_LENGTH" : INTERVAL_LENGTH, "time_stamp" : next_actuation+INTERVAL_LENGTH})
+        self.grid.send_pyobj({"interval" : time_interval, "power": 0, "INTERVAL_LENGTH" : INTERVAL_LENGTH, "time_stamp" : next_actuation+INTERVAL_LENGTH})
       sleep(max(min(next_prediction, next_polling) - time(), 0))
 
   def post_offers(self, time_interval):
